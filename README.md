@@ -1,4 +1,4 @@
-# TigerStyle
+# C++Style
 
 ## The Essence Of Style
 
