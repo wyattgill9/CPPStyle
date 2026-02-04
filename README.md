@@ -117,6 +117,19 @@ Code](https://spinroot.com/gerard/pdf/P10.pdf) will change the way you code fore
     assertion can be added. For example, assert validity of data right before writing it to disk,
     and also immediately after reading from disk.
 
+    ```cpp
+    void write_record(const Record& record) {
+      assert(record.is_valid()); // Assert before write
+      storage_.write(serialize(record));
+    }
+
+    Record read_record(uint64_t id) {
+      Record record = deserialize(storage_.read(id));
+      assert(record.is_valid()); // Assert after read
+      return record;
+    }
+    ```
+
   - On occasion, you may use a blatantly true assertion instead of a comment as stronger
     documentation where the assertion condition is critical and surprising.
 
@@ -254,24 +267,29 @@ Beyond these rules:
 
 - Let the CPU be a sprinter doing the 100m. Be predictable. Don't force the CPU to zig zag and
   change lanes. Give the CPU large enough chunks of work. This comes back to batching.
+  
+```cpp
+// GOOD: Predictable memory access pattern
+void process_array(std::span<Data> data) {
+  for (auto& item : data) { // Sequential access, prefetcher friendly
+    item.value = compute(item.input);
+  }
+}
+
+// BAD: Random access patterns
+void process_random(std::span<Data> data, std::span<const size_t> indices) {
+  for (size_t idx : indices) { // Random jumps, cache unfriendly
+    data[idx].value = compute(data[idx].input);
+  }
+}
+```
 
 - Be explicit. Minimize dependence on the compiler to do the right thing for you.
 
   In particular, extract hot loops into stand-alone functions with primitive arguments without
-  `self` (see [an example](https://github.com/tigerbeetle/tigerbeetle/blob/0.16.19/src/lsm/compaction.zig#L1932-L1937)).
+  `this` (see [an example](https://github.com/tigerbeetle/tigerbeetle/blob/0.16.19/src/lsm/compaction.zig#L1932-L1937)).
   That way, the compiler doesn't need to prove that it can cache struct's fields in registers, and a
   human reader can spot redundant computations easier.
-
-| Resource        | Bandwidth (approx) | Latency (approx) |
-|-----------------|--------------------|------------------|
-| L1 cache        | 1 TB/s             | 1 ns             |
-| L2 cache        | 500 GB/s           | 4 ns             |
-| L3 cache        | 200 GB/s           | 20 ns            |
-| RAM             | 50 GB/s            | 100 ns           |
-| NVMe SSD        | 5 GB/s             | 100 μs           |
-| HDD             | 200 MB/s           | 10 ms            |
-| 10 GbE          | 1 GB/s             | 100 μs           |
-| Datacenter RTT  | —                  | 500 μs           |
 
 ## Developer Experience
 
@@ -285,8 +303,17 @@ Beyond these rules:
   understand the domain. Take time to find the perfect name, to find nouns and verbs that work
   together, so that the whole is greater than the sum of its parts.
 
-- Use `snake_case` for function, variable, and file names. The underscore is the closest thing we
-  have as programmers to a space, and helps to separate words and encourage descriptive names.
+| Element                     | Convention                     | Example                                           |
+|-----------------------------|--------------------------------|-------------------------------------------------|
+| Types, Classes, Structs, Enums | PascalCase                     | `ConnectionPool`, `MessageType`                 |
+| Functions, Methods          | snake_case                     | `process_message()`, `get_count()`             |
+| Variables, Parameters       | snake_case                     | `sector_index`, `byte_count`                    |
+| Member Variables            | snake_case_ (trailing underscore) | `connection_pool_`, `buffer_`                  |
+| Constants, Enum Values      | kPascalCase                    | `kMaxConnections`, `kBufferSize`               |
+| Macros                      | SCREAMING_SNAKE_CASE           | `VERIFY`, `LIKELY`                              |
+| Namespaces                  | snake_case                     | `tiger::storage`                                |
+| File Names                  | snake_case.cpp                 | `connection_pool.cpp`                            |
+
 
 - Do not abbreviate variable names, unless the variable is a primitive integer type used as an
   argument to a sort function or matrix calculation. Use long form arguments in scripts: `--force`,
