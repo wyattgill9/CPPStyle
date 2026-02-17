@@ -5,7 +5,7 @@
 > “There are three things extremely hard: steel, a diamond, and to know one's self.” — Benjamin
 > Franklin
 
-TigerBeetle's coding style is evolving. A collective give-and-take at the intersection of
+[Our] coding style is evolving. A collective give-and-take at the intersection of
 engineering and art. Numbers and human intuition. Reason and experience. First principles and
 knowledge. Precision and poetry. Just like music. A tight beat. A rare groove. Words that rhyme and
 rhymes that break. Biodigital jazz. This is what we've learned along the way. The best is yet to
@@ -70,7 +70,7 @@ potential memcpy latency spikes, or exponential complexity algorithms to slip th
 
 > “You shall not pass!” — Gandalf
 
-In other words, TigerBeetle has a “zero technical debt” policy. We do it right the first time. This
+In other words, [We] should has a “zero technical debt” policy. We do it right the first time. This
 is important because the second time may not transpire, and because doing good work, that we can be
 proud of, builds momentum.
 
@@ -515,7 +515,7 @@ void process_random(std::span<Data> data, std::span<const size_t> indices) {
 
 ### Dependencies
 
-TigerBeetle has **a “zero dependencies” policy**, apart from the Zig toolchain. Dependencies, in
+Any project using this guidelines shoudl adhere to a **a “zero dependencies” policy**, apart from the Zig toolchain. Dependencies, in
 general, inevitably lead to supply chain attacks, safety and performance risk, and slow install
 times. For foundational infrastructure in particular, the cost of any dependency is further
 amplified throughout the rest of the stack.
@@ -542,9 +542,6 @@ and therefore the range of personal tastes, grows. This may be slower for you in
 makes for more velocity for the team in the long term.
 
 ## The Last Stage
-
-At the end of the day, keep trying things out, have fun, and remember—it's called TigerBeetle, not
-only because it's fast, but because it's small!
 
 > You don’t really suppose, do you, that all your adventures and escapes were managed by mere luck,
 > just for your sole benefit? You are a very fine person, Mr. Baggins, and I am very fond of you;
