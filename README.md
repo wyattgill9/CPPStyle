@@ -1,5 +1,3 @@
-# C++Style
-
 ## The Essence Of Style
 
 > “There are three things extremely hard: steel, a diamond, and to know one's self.” — Benjamin
@@ -515,31 +513,7 @@ void process_random(std::span<Data> data, std::span<const size_t> indices) {
 
 ### Dependencies
 
-Any project using this guidelines shoudl adhere to a **a “zero dependencies” policy**, apart from the Zig toolchain. Dependencies, in
-general, inevitably lead to supply chain attacks, safety and performance risk, and slow install
-times. For foundational infrastructure in particular, the cost of any dependency is further
-amplified throughout the rest of the stack.
-
-### Tooling
-
-Similarly, tools have costs. A small standardized toolbox is simpler to operate than an array of
-specialized instruments each with a dedicated manual. Our primary tool is Zig. It may not be the
-best for everything, but it's good enough for most things. We invest into our Zig tooling to ensure
-that we can tackle new problems quickly, with a minimum of accidental complexity in our local
-development environment.
-
-> “The right tool for the job is often the tool you are already using—adding new tools has a higher
-> cost than many people appreciate” — John Carmack
-
-For example, the next time you write a script, instead of `scripts/*.sh`, write `scripts/*.zig`.
-
-This not only makes your script cross-platform and portable, but introduces type safety and
-increases the probability that running your script will succeed for everyone on the team, instead of
-hitting a Bash/Shell/OS-specific issue.
-
-Standardizing on Zig for tooling is important to ensure that we reduce dimensionality, as the team,
-and therefore the range of personal tastes, grows. This may be slower for you in the short term, but
-makes for more velocity for the team in the long term.
+Any project using these guidelines should adhere to a **“low dependencies” policy**, apart from the C++ toolchain. Dependencies, in general, inevitably introduce supply chain risks, safety and performance concerns, and slower install times. For foundational infrastructure in particular, the cost of each dependency is further amplified throughout the rest of the stack, so they should be used sparingly and only when clearly justified.
 
 ## The Last Stage
 
